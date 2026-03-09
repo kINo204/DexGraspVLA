@@ -1,0 +1,75 @@
+name: grasp_mujoco
+
+image_shape: [3, 518, 518]
+mask_image_shape: [4, 518, 518]
+dataset_paths:
+ - data/grasp_demo_example
+
+shape_meta: &shape_meta
+  obs:
+    right_cam_img:
+      shape: ${task.image_shape}
+      type: rgb
+      horizon: ${n_obs_steps}
+    rgbm:
+      shape: ${task.mask_image_shape}
+      type: rgbm
+      horizon: ${n_obs_steps}
+    right_state:
+      shape: [13]
+      type: low_dim
+      horizon: ${n_obs_steps}
+  action:
+    shape: [13]
+    horizon: ${n_action_steps}
+
+env_runner:
+  _target_: controller.env_runner.mujoco_image_runner.MuJoCoImageRunner
+  enabled: false
+  shape_meta: ${shape_meta}
+  n_obs_steps: ${n_obs_steps}
+  max_episodes: 1
+  max_steps: 200
+  save_video: true
+  save_data: false
+  strict_dependencies: false
+  env:
+    model_path: null
+    render_mode: rgb_array
+    render_width: 640
+    render_height: 480
+    wrist_camera: wrist
+    third_person_camera: third
+    frame_skip: 10
+    action_low: [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+    action_high: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+    robot:
+      arm_joint_names: []
+      hand_joint_names: []
+      arm_actuator_names: []
+      hand_actuator_names: []
+      arm_lower_limits: [-3.1, -2.268, -3.1, -2.355, -3.1, -2.233, -6.28]
+      arm_upper_limits: [3.1, 2.268, 3.1, 2.355, 3.1, 2.233, 6.28]
+      hand_action_low: [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+      hand_action_high: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+      initial_arm_qpos: [0.36939895, -1.42726047, 0.32529447, -0.78829542, -1.78686804, 0.85681702, 2.33696087]
+      initial_hand_qpos: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+    task:
+      episode_horizon: 200
+      render_fps: 20
+      reward_scale: 1.0
+      success_body_names: []
+      success_height_threshold: 0.15
+    mask:
+      source: segmentation
+      geom_names: []
+
+dataset:
+  _target_: controller.dataset.mask_image_dataset.MaskImageDataset
+  zarr_paths: ${task.dataset_paths}
+  horizon: ${n_action_steps}
+  pad_before: ${eval:'${n_obs_steps}-1+${n_latency_steps}'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0
+
