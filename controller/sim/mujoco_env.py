@@ -188,7 +188,10 @@ class DexGraspMujocoEnv(_gym.Env if _gym is not None else object):
     def _set_joint_qpos(self, qpos_ids: np.ndarray, qpos_values: np.ndarray) -> None:
         if qpos_ids.size == 0:
             return
-        self.data.qpos[qpos_ids] = qpos_values
+        qpos_values = np.asarray(qpos_values, dtype=np.float32)
+        if qpos_values.shape[0] < qpos_ids.shape[0]:
+            qpos_values = np.pad(qpos_values, (0, qpos_ids.shape[0] - qpos_values.shape[0]))
+        self.data.qpos[qpos_ids] = qpos_values[: qpos_ids.shape[0]]
 
     def _apply_action(self, action: np.ndarray) -> None:
         arm_action = self._scale_arm_action(action[:7])
