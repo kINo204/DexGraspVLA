@@ -65,7 +65,7 @@
                     <geom name="arm_ee_geom" type="sphere" size="0.04" rgba="0.4 0.4 0.7 1"/>
                     <site name="arm_wrist_site" pos="0 0 0" size="0.005"/>
                     <!-- Wrist camera looks along +X of the arm_ee frame -->
-                    <camera name="wrist" pos="0.06 0 0.02" euler="0 0 0" fovy="50"/>
+                    <camera name="wrist" pos="0.06 0 0.02" euler="0 180 0" fovy="50"/>
                   </body>
                 </body>
               </body>
@@ -76,7 +76,7 @@
     </body>
 
     <!-- Fixed world view toward table center -->
-    <camera name="third" pos="0.8 0 0.6" euler="-25 180 0" fovy="60"/>
+    <camera name="third" pos="0.8 0 0.6" euler="-60 180 0" fovy="60"/>
 
     <body name="object" pos="0.4 0 0.05">
       <freejoint/>
