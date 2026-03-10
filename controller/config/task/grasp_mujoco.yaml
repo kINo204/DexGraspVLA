@@ -34,7 +34,7 @@ env_runner:
   save_data: false
   strict_dependencies: false
   env:
-    model_path: null
+    model_path: assets/mujoco/dexgrasp_shadowhand_arm_scene.xml
     render_mode: rgb_array
     render_width: 640
     render_height: 480
@@ -44,10 +44,36 @@ env_runner:
     action_low: [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     action_high: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     robot:
-      arm_joint_names: []
-      hand_joint_names: []
-      arm_actuator_names: []
-      hand_actuator_names: []
+      arm_joint_names:
+        - arm_joint_1
+        - arm_joint_2
+        - arm_joint_3
+        - arm_joint_4
+        - arm_joint_5
+        - arm_joint_6
+        - arm_joint_7
+      hand_joint_names:
+        - rh_WRJ2
+        - rh_WRJ1
+        - rh_FFJ3
+        - rh_FFJ0
+        - rh_MFJ3
+        - rh_MFJ0
+      arm_actuator_names:
+        - arm_act_1
+        - arm_act_2
+        - arm_act_3
+        - arm_act_4
+        - arm_act_5
+        - arm_act_6
+        - arm_act_7
+      hand_actuator_names:
+        - rh_A_WRJ2
+        - rh_A_WRJ1
+        - rh_A_FFJ3
+        - rh_A_FFJ0
+        - rh_A_MFJ3
+        - rh_A_MFJ0
       arm_lower_limits: [-3.1, -2.268, -3.1, -2.355, -3.1, -2.233, -6.28]
       arm_upper_limits: [3.1, 2.268, 3.1, 2.355, 3.1, 2.233, 6.28]
       hand_action_low: [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
@@ -62,7 +88,8 @@ env_runner:
       success_height_threshold: 0.15
     mask:
       source: segmentation
-      geom_names: []
+      geom_names:
+        - object_geom
 
 dataset:
   _target_: controller.dataset.mask_image_dataset.MaskImageDataset
@@ -72,4 +99,3 @@ dataset:
   pad_after: ${eval:'${n_action_steps}-1'}
   seed: 42
   val_ratio: 0
-

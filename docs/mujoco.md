@@ -20,9 +20,25 @@ The simulator code still needs repository-local or server-local assets that are 
 - Camera names for the wrist and third-person views
 - Geom names for segmentation masks and body names for success checks
 
+This repo now includes `assets/mujoco/dexgrasp_shadowhand_arm_scene.xml`, which expects the ShadowHand MJCF from MuJoCo Menagerie to exist at:
+
+`third_party/mujoco_menagerie/shadow_hand/right_hand.xml`
+
+The Menagerie ShadowHand root body is `rh_forearm`, and the weld in `assets/mujoco/dexgrasp_shadowhand_arm_scene.xml` is already set accordingly.
+
+The hand joint/actuator names in `controller/config/task/grasp_mujoco.yaml` now match Menagerie. If you switch to a different ShadowHand source, update those names.
+
 ## Server Notes
 
 For Linux servers, headless rendering is typically run with `MUJOCO_GL=egl`. Save videos by enabling the MuJoCo env runner and setting a valid `model_path` in `grasp_mujoco.yaml`.
+
+## Menagerie Assets
+
+Clone MuJoCo Menagerie into `third_party/mujoco_menagerie` so the ShadowHand include path resolves:
+
+```bash
+git clone https://github.com/google-deepmind/mujoco_menagerie.git third_party/mujoco_menagerie
+```
 
 ## Example Commands
 

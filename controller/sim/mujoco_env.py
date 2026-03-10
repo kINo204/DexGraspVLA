@@ -79,7 +79,7 @@ class DexGraspMujocoEnv(_gym.Env if _gym is not None else object):
             robot["arm_joint_names"], robot.get("arm_actuator_names", [])
         )
         self.hand_binding = self._bind_joints_and_actuators(
-            robot["hand_joint_names"], robot.get("hand_actuator_names", [])
+            robot["hand_joint_names"], robot.get("hand_actuator_names", []), allow_tendons=True
         )
         self.mask_geom_ids = self._resolve_ids(
             self.mask_cfg.get("geom_names", []), mujoco.mjtObj.mjOBJ_GEOM
@@ -151,10 +151,13 @@ class DexGraspMujocoEnv(_gym.Env if _gym is not None else object):
         self.renderers.clear()
 
     def _bind_joints_and_actuators(
-        self, joint_names: Sequence[str], actuator_names: Sequence[str]
+        self, joint_names: Sequence[str], actuator_names: Sequence[str], allow_tendons: bool = False
     ) -> JointBinding:
         qpos_ids = []
         for joint_name in joint_names:
+            if allow_tendons and joint_name.startswith("rh_") and joint_name.endswith("0"):
+                # Tendon-driven joints do not map to qpos directly.
+                continue
             joint_id = self.mujoco.mj_name2id(self.model, self.mujoco.mjtObj.mjOBJ_JOINT, joint_name)
             if joint_id < 0:
                 raise ValueError(f"Unknown MuJoCo joint: {joint_name}")
@@ -213,11 +216,11 @@ class DexGraspMujocoEnv(_gym.Env if _gym is not None else object):
         head = self._render_rgb(self.third_person_camera)
         mask = self._render_mask(self.third_person_camera)
         rgbm = np.concatenate([head, mask[..., None]], axis=-1)
+        hand_qpos = self.data.qpos[self.hand_binding.qpos_ids].astype(np.float32)
+        if hand_qpos.shape[0] < 6:
+            hand_qpos = np.pad(hand_qpos, (0, 6 - hand_qpos.shape[0]))
         right_state = np.concatenate(
-            [
-                self._unscale_arm_state(self.data.qpos[self.arm_binding.qpos_ids]),
-                self.data.qpos[self.hand_binding.qpos_ids].astype(np.float32),
-            ],
+            [self._unscale_arm_state(self.data.qpos[self.arm_binding.qpos_ids]), hand_qpos[:6]],
             axis=0,
         ).astype(np.float32)
         return {"right_cam_img": wrist, "rgbm": rgbm, "right_state": right_state}
