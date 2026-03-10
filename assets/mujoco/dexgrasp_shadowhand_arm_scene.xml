@@ -75,8 +75,8 @@
       </body>
     </body>
 
-    <!-- Fixed world view toward table center -->
-    <camera name="third" pos="0.8 0 0.6" xyaxes="0 -1 0 0.809 0 0.588" fovy="60"/>
+    <!-- Fixed world view: top-down above the table -->
+    <camera name="third" pos="0.4 0 1.0" xyaxes="1 0 0 0 -1 0" fovy="60"/>
 
     <body name="object" pos="0.4 0 0.05">
       <freejoint/>
