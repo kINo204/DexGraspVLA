@@ -65,8 +65,6 @@
                   <body name="arm_ee" pos="0 0 0.15">
                     <geom name="arm_ee_geom" type="sphere" size="0.04" rgba="0.4 0.4 0.7 1"/>
                     <site name="arm_wrist_site" pos="0 0 0" size="0.005"/>
-                    <!-- Wrist camera oriented to look along +X of the arm_ee frame -->
-                    <camera name="wrist" pos="0.25 0 0.0" xyaxes="0 1 0 0 0 1" fovy="40"/>
                   </body>
                 </body>
               </body>
@@ -79,6 +77,11 @@
     <!-- Fixed world view: top-down above the table -->
     <camera name="third" pos="0.6 0 1.0" xyaxes="1 0 0 0 1 0" fovy="60"/>
 
+    <!-- Wrist camera mounted to the hand (along fingers, thumb-side offset). -->
+    <body name="hand_cam_mount">
+      <camera name="wrist" pos="0 0 0" xyaxes="1 0 0 0 -1 0" fovy="40"/>
+    </body>
+
     <body name="object" pos="0.6 0 0.12">
       <freejoint/>
       <geom name="object_geom" type="box" size="0.03 0.03 0.03" rgba="0.5 0.7 0.5 1" condim="6"
@@ -89,6 +92,8 @@
   <equality>
     <!-- Menagerie right_hand.xml root body is rh_forearm. -->
     <weld name="weld_hand_to_arm" body1="arm_ee" body2="rh_forearm" relpose="0 0 0.06 1 0 0 0"/>
+    <!-- Mount wrist camera on the hand (thumb-side), looking along fingers. -->
+    <weld name="weld_wrist_cam" body1="rh_wrist" body2="hand_cam_mount" relpose="0 0.03 0.06 1 0 0 0"/>
   </equality>
 
   <actuator>
