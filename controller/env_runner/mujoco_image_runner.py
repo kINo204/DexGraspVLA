@@ -26,6 +26,8 @@ class MuJoCoImageRunner(BaseImageRunner):
         save_video: bool = True,
         save_data: bool = False,
         strict_dependencies: bool = False,
+        debug_action: bool = False,
+        debug_action_scale: float = 0.2,
     ):
         super().__init__(output_dir)
         self.env_cfg = env
@@ -37,6 +39,8 @@ class MuJoCoImageRunner(BaseImageRunner):
         self.save_video = save_video
         self.save_data = save_data
         self.strict_dependencies = strict_dependencies
+        self.debug_action = debug_action
+        self.debug_action_scale = debug_action_scale
 
     def run(self, policy: BaseImagePolicy) -> Dict:
         if not self.enabled:
@@ -88,9 +92,16 @@ class MuJoCoImageRunner(BaseImageRunner):
                         model_obs_np,
                         lambda x: torch.from_numpy(x).unsqueeze(0).to(device=device),
                     )
-                    with torch.no_grad():
-                        action_pred = policy.predict_action(model_obs)
-                    action = action_pred[0, 0].detach().cpu().numpy()
+                    if self.debug_action:
+                        phase = step_idx * 0.1
+                        action = np.zeros((13,), dtype=np.float32)
+                        action[:7] = self.debug_action_scale * np.sin(
+                            phase + np.arange(7, dtype=np.float32) * 0.5
+                        )
+                    else:
+                        with torch.no_grad():
+                            action_pred = policy.predict_action(model_obs)
+                        action = action_pred[0, 0].detach().cpu().numpy()
 
                     next_obs, reward, terminated, truncated, info = env.step(action)
                     adapter.push(next_obs)
