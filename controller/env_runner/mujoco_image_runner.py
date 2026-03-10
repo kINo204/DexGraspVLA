@@ -4,6 +4,7 @@ from typing import Dict
 
 import numpy as np
 import torch
+import hydra
 
 from controller.common.pytorch_util import dict_apply
 from controller.env_runner.base_image_runner import BaseImageRunner
@@ -50,6 +51,12 @@ class MuJoCoImageRunner(BaseImageRunner):
 
         if not self.env_cfg.get("model_path"):
             return {"mujoco_rollout_skipped": 1.0, "mujoco_missing_model_path": 1.0}
+        if not os.path.isabs(self.env_cfg["model_path"]):
+            try:
+                base_dir = hydra.utils.get_original_cwd()
+            except Exception:
+                base_dir = os.getcwd()
+            self.env_cfg["model_path"] = os.path.abspath(os.path.join(base_dir, self.env_cfg["model_path"]))
 
         rollout_dir = os.path.join(self.output_dir, "sim_rollouts", datetime.now().strftime("%Y%m%d_%H%M%S"))
         os.makedirs(rollout_dir, exist_ok=True)
@@ -121,4 +128,3 @@ class MuJoCoImageRunner(BaseImageRunner):
             "mujoco_rollout_success_rate": success_count / max(self.max_episodes, 1),
             "mujoco_rollout_steps": float(executed_steps),
         }
-
