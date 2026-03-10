@@ -1,6 +1,5 @@
 <mujoco model="dexgrasp_shadowhand_arm_scene">
-  <compiler angle="radian" coordinate="local" inertiafromgeom="true"
-    meshdir="../../third_party/mujoco_menagerie/shadow_hand/assets"/>
+  <compiler angle="radian" coordinate="local" inertiafromgeom="true"/>
   <option timestep="0.002" gravity="0 0 -9.81"/>
 
   <!-- ShadowHand model from MuJoCo Menagerie (external). -->
@@ -94,3 +93,4 @@
     <position name="arm_act_7" joint="arm_joint_7" kp="200"/>
   </actuator>
 </mujoco>
+
