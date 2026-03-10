@@ -79,7 +79,7 @@
 
     <!-- Wrist camera mounted to the hand (along fingers, thumb-side offset). -->
     <body name="hand_cam_mount">
-      <camera name="wrist" pos="0 0 0" xyaxes="1 0 0 0 -1 0" fovy="40"/>
+      <camera name="wrist" pos="0 0 0" xyaxes="1 0 0 0 1 0" fovy="40"/>
     </body>
 
     <body name="object" pos="0.6 0 0.12">
@@ -93,7 +93,7 @@
     <!-- Menagerie right_hand.xml root body is rh_forearm. -->
     <weld name="weld_hand_to_arm" body1="arm_ee" body2="rh_forearm" relpose="0 0 0.06 1 0 0 0"/>
     <!-- Mount wrist camera on the palm (thumb-side), looking along fingers. -->
-    <weld name="weld_wrist_cam" body1="rh_palm" body2="hand_cam_mount" relpose="0 -0.03 0.09 1 0 0 0"/>
+    <weld name="weld_wrist_cam" body1="rh_palm" body2="hand_cam_mount" relpose="0 -0.04 0.12 1 0 0 0"/>
   </equality>
 
   <actuator>
