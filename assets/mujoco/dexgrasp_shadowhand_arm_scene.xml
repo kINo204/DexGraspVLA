@@ -3,8 +3,8 @@
     meshdir="../../third_party/mujoco_menagerie/shadow_hand/assets"/>
   <option timestep="0.002" gravity="0 0 -9.81"/>
 
-  <!-- ShadowHand model from MuJoCo Menagerie (external). -->
-  <include file="../../third_party/mujoco_menagerie/shadow_hand/right_hand.xml"/>
+  <!-- ShadowHand model with freejoint root to allow arm attachment. -->
+  <include file="right_hand_local.xml"/>
 
   <visual>
     <rgba haze="0.15 0.25 0.35 1"/>
