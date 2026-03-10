@@ -96,8 +96,6 @@
   <!-- No worldbody here. The hand body is included under the arm end-effector. -->
 
   <contact>
-    <exclude body1="rh_wrist" body2="rh_forearm"/>
-    <exclude body1="rh_thproximal" body2="rh_thmiddle"/>
   </contact>
 
   <tendon>
