@@ -33,7 +33,8 @@
       <geom name="table_geom" type="box" size="0.3 0.3 0.025" pos="0 0 0.025" rgba="0.4 0.3 0.2 1" condim="6"/>
     </body>
 
-    <body name="arm_base" pos="0 0 0.2">
+    <!-- Arm points toward +X (toward the table) -->
+    <body name="arm_base" pos="0.2 0 0.2" quat="0.7071068 0 0.7071068 0">
       <geom name="arm_link_1" fromto="0 0 0 0 0 0.3" size="0.04"/>
       <joint name="arm_joint_1" axis="0 0 1" range="-3.1 3.1"/>
 
@@ -65,7 +66,7 @@
                     <geom name="arm_ee_geom" type="sphere" size="0.04" rgba="0.4 0.4 0.7 1"/>
                     <site name="arm_wrist_site" pos="0 0 0" size="0.005"/>
                     <!-- Wrist camera oriented to look along +X of the arm_ee frame -->
-                    <camera name="wrist" pos="0.06 0 0.02" xyaxes="0 1 0 0 0 1" fovy="50"/>
+                    <camera name="wrist" pos="0.12 0 0.0" xyaxes="0 1 0 0 0 1" fovy="50"/>
                   </body>
                 </body>
               </body>
