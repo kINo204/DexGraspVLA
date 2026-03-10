@@ -91,11 +91,5 @@
     <position name="arm_act_5" joint="arm_joint_5" kp="200"/>
     <position name="arm_act_6" joint="arm_joint_6" kp="200"/>
     <position name="arm_act_7" joint="arm_joint_7" kp="200"/>
-    <position name="rh_A_WRJ2" joint="rh_WRJ2" class="wrist_y"/>
-    <position name="rh_A_WRJ1" joint="rh_WRJ1" class="wrist_x"/>
-    <position name="rh_A_FFJ3" joint="rh_FFJ3" class="proximal"/>
-    <position name="rh_A_FFJ0" tendon="rh_FFJ0" class="middle_distal"/>
-    <position name="rh_A_MFJ3" joint="rh_MFJ3" class="proximal"/>
-    <position name="rh_A_MFJ0" tendon="rh_MFJ0" class="middle_distal"/>
   </actuator>
 </mujoco>
