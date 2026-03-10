@@ -144,7 +144,13 @@ class DexGraspMujocoEnv(_gym.Env if _gym is not None else object):
         if self.model.jnt_type[jnt_adr] != self.mujoco.mjtJoint.mjJNT_FREE:
             return
         qpos_adr = self.model.jnt_qposadr[jnt_adr]
-        self.data.qpos[qpos_adr:qpos_adr + 3] = self.data.xpos[arm_id]
+
+        # Match the weld relpose (arm_ee -> rh_forearm) used in the scene XML.
+        relpos = np.array([0.0, 0.0, 0.06], dtype=np.float32)
+        arm_xmat = self.data.xmat[arm_id].reshape(3, 3)
+        world_offset = arm_xmat @ relpos
+
+        self.data.qpos[qpos_adr:qpos_adr + 3] = self.data.xpos[arm_id] + world_offset
         self.data.qpos[qpos_adr + 3:qpos_adr + 7] = self.data.xquat[arm_id]
 
     def step(self, action: np.ndarray):
