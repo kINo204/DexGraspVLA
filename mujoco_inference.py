@@ -48,7 +48,15 @@ def main():
     cfg.task.env_runner.max_episodes = args.episodes
     cfg.task.env_runner.max_steps = args.steps
 
-    workspace = hydra.utils.get_class(cfg._target_)(cfg)
+    output_dir = os.path.join(
+        "data",
+        "outputs",
+        "mujoco_inference",
+        datetime.now().strftime("%Y.%m.%d-%H.%M.%S"),
+    )
+    os.makedirs(output_dir, exist_ok=True)
+
+    workspace = hydra.utils.get_class(cfg._target_)(cfg, output_dir=output_dir)
     policy = workspace.model
     policy.eval().to(torch.device("cuda:0" if torch.cuda.is_available() else "cpu"))
     runner = hydra.utils.instantiate(cfg.task.env_runner, output_dir=workspace.output_dir)
