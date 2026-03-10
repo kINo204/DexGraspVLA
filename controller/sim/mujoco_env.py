@@ -123,10 +123,29 @@ class DexGraspMujocoEnv(_gym.Env if _gym is not None else object):
         self.step_count = 0
         self._set_joint_qpos(self.arm_binding.qpos_ids, self.initial_arm_qpos)
         self._set_joint_qpos(self.hand_binding.qpos_ids, self.initial_hand_qpos)
+        # Forward once to get arm pose, then align the hand root to the arm end-effector.
+        self.mujoco.mj_forward(self.model, self.data)
+        self._align_hand_root()
         self.mujoco.mj_forward(self.model, self.data)
 
         obs = self._get_obs()
         return obs, {"is_success": False}
+
+    def _align_hand_root(self) -> None:
+        """Snap the freejoint root of the hand to the arm end-effector pose."""
+        body_id = self.mujoco.mj_name2id(self.model, self.mujoco.mjtObj.mjOBJ_BODY, "rh_forearm")
+        arm_id = self.mujoco.mj_name2id(self.model, self.mujoco.mjtObj.mjOBJ_BODY, "arm_ee")
+        if body_id < 0 or arm_id < 0:
+            return
+        jnt_adr = self.model.body_jntadr[body_id]
+        jnt_num = self.model.body_jntnum[body_id]
+        if jnt_num <= 0:
+            return
+        if self.model.jnt_type[jnt_adr] != self.mujoco.mjtJoint.mjJNT_FREE:
+            return
+        qpos_adr = self.model.jnt_qposadr[jnt_adr]
+        self.data.qpos[qpos_adr:qpos_adr + 3] = self.data.xpos[arm_id]
+        self.data.qpos[qpos_adr + 3:qpos_adr + 7] = self.data.xquat[arm_id]
 
     def step(self, action: np.ndarray):
         action = np.asarray(action, dtype=np.float32)
