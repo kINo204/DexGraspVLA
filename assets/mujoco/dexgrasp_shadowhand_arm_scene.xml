@@ -92,8 +92,8 @@
   <equality>
     <!-- Menagerie right_hand.xml root body is rh_forearm. -->
     <weld name="weld_hand_to_arm" body1="arm_ee" body2="rh_forearm" relpose="0 0 0.06 1 0 0 0"/>
-    <!-- Mount wrist camera on the hand (thumb-side), looking along fingers. -->
-    <weld name="weld_wrist_cam" body1="rh_wrist" body2="hand_cam_mount" relpose="0 0.03 0.06 1 0 0 0"/>
+    <!-- Mount wrist camera on the palm (thumb-side), looking along fingers. -->
+    <weld name="weld_wrist_cam" body1="rh_palm" body2="hand_cam_mount" relpose="0 -0.03 0.09 1 0 0 0"/>
   </equality>
 
   <actuator>
