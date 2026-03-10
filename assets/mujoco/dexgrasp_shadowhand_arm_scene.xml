@@ -74,8 +74,8 @@
       </body>
     </body>
 
-    <!-- Fixed world view: human-eye-like angle toward the table -->
-    <camera name="third" pos="0.2 -1.0 0.6" xyaxes="-0.931 0.372 0 0.157 0.392 0.909" fovy="55"/>
+    <!-- Fixed world view: eye-level angle toward the table -->
+    <camera name="third" pos="0.6 -0.8 0.6" xyaxes="1 0 0 0 0.492 0.874" fovy="55"/>
 
     <body name="object" pos="0.6 0 0.12">
       <freejoint/>
